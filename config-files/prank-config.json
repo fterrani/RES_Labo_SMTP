@@ -1,0 +1,27 @@
+{
+  "smtpServer": {
+    "host": "localhost",
+    "port": 25
+  },
+  "nbPrankGroups": 5,
+  "prankMails": [
+    {
+      "subject": "Normal mail",
+      "body": "This is a normal mail.\n\nBest regards"
+    },
+    {
+      "subject": "章レム献属達ヤ注見とらっし",
+      "body": "T海そら勝飛い経場ス毎作はゃりや目降ケアモ閣課フユノト議農ーも救法つねしン合日戒コソチマ川減ごも率39勘ニモクム極走見漢がぼあぱ。"
+    }
+  ],
+  "victims": [
+    "a@example.org",
+    "b@example.org",
+    "c@example.org",
+    "d@example.org",
+    "e@example.org",
+    "f@example.org",
+    "g@example.org",
+    "h@example.org"
+  ]
+}
