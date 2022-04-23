@@ -26,13 +26,19 @@ However, a MockMock instance only allows *visualizing e-mails that should have b
 
 This project uses a [bugfixed MockMock fork maintained by HEIG-VD](https://github.com/HEIGVD-Course-API/MockMock) since the original project isn't maintained anymore. To run this fork in a Docker container, do the following:
 
-1. Open a terminal and go in the folder of this repository that contains a file named `Dockerfile`.
+1. If this is not done yet, start Docker on your machine.
 
-2. Run this command to build a Docker image containing HEIG's MockMock and JRE 7:
+2. Open a terminal and go in the folder of this repository that contains a file named `Dockerfile`.
+
+3. Run this command to build a Docker image containing HEIG's MockMock and JRE 7:
    `docker build -t heig-mockmock .`
 
-3. Once the image was built, run this command to start the container in a temporary container:
+4. Once the image was built, run this command to start the container in a temporary container:
    `docker run -d --rm -p 25:25/tcp -p 8282:8282/tcp heig-mockmock`
+
+5. MockMock should now be running. To see the webinterface of MockMock, open a web browser and go to `http://localhost:8282`
+
+6. When you are done using MockMock, you can stop the container using the following command: `docker container stop <container-id>` where `<container-id>` is the name of the container you created earlier (use `docker ps` to see started container and their IDs)
 
 ## How to use
 
