@@ -1,5 +1,7 @@
 package smtp.commands;
 
+import smtp.SmtpResponseType;
+
 public class SmtpEhlo extends SmtpCommand
 {
     private final String domain;

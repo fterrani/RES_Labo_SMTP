@@ -1,12 +1,13 @@
+import config.PrankConfigReader;
+import config.PrankConfig;
+
 import java.io.*;
-import java.net.Socket;
-import java.nio.charset.StandardCharsets;
+import java.nio.file.Path;
 
 public class Program
 {
     public static void main( String[] args ) throws IOException
     {
-        // TODO Implement config reading => maven FTI
         // TODO Ask if JSON is ok
 
         // TODO add missing commands ECE
@@ -14,5 +15,9 @@ public class Program
         // TODO implements mail sending ECE
         // TODO encoding subject and body => after
         // => TODO ask witch encoding the prof wants
+
+        Path configPath = Path.of("config-files", "prank-config.json");
+        PrankConfig config = PrankConfigReader.readPrankConfig( configPath );
+        System.out.println();
     }
 }
