@@ -42,7 +42,7 @@ public abstract class SmtpCommand
         else
             return true;
     }
-    
+
     public String getExpectedResponseRegex()
     {
         return expectedResponseRegex;
