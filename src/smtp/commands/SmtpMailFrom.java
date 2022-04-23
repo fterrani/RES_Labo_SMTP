@@ -1,3 +1,5 @@
+package smtp.commands;
+
 public class SmtpMailFrom extends SmtpCommand
 {
     private final String sender;

@@ -1,6 +1,10 @@
+package smtp.commands;
+
+import smtp.SmtpResponseType;
+
 import java.util.regex.Pattern;
 
-// TODO Create subclasses for all commands
+// TODO Create subclasses for all smtp.commands
 public abstract class SmtpCommand
 {
     private String expectedResponseRegex = null;
@@ -38,7 +42,7 @@ public abstract class SmtpCommand
         else
             return true;
     }
-
+    
     public String getExpectedResponseRegex()
     {
         return expectedResponseRegex;

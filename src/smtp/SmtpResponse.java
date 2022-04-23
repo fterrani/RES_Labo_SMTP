@@ -1,3 +1,5 @@
+package smtp;
+
 public class SmtpResponse
 {
     public String code;

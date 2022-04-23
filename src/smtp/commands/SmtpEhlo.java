@@ -1,3 +1,5 @@
+package smtp.commands;
+
 public class SmtpEhlo extends SmtpCommand
 {
     private final String domain;
