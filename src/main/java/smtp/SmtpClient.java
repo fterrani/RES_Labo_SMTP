@@ -8,6 +8,8 @@ import java.nio.charset.StandardCharsets;
 
 public class SmtpClient
 {
+    public static final String END_LINE = "\r\n";
+
     private final Socket socket;
     private final BufferedReader receiveReader;
     private final PrintWriter sendWriter;

@@ -8,7 +8,7 @@ public class SmtpMailFrom extends SmtpCommand
 
     public SmtpMailFrom( String sender )
     {
-        super( SmtpResponseType.POSITIVE_COMPLETION);
+        super("250");
         this.sender = sender;
     }
 
