@@ -14,6 +14,6 @@ public class SmtpRcptTo extends SmtpCommand {
     @Override
     public String toString()
     {
-        return String.format("RCPT TO <%s>", mail );
+        return String.format("RCPT TO: <%s>", mail );
     }
 }

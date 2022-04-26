@@ -1,10 +1,11 @@
 package smtp;
 
-import smtp.commands.SmtpCommand;
+import smtp.commands.*;
 
 import java.io.*;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 
 public class SmtpClient
 {
@@ -17,22 +18,35 @@ public class SmtpClient
     public SmtpClient(String host, int port) throws IOException
     {
         socket = new Socket(host, port );
-        receiveReader = new BufferedReader( new InputStreamReader(socket.getInputStream(), StandardCharsets.US_ASCII) );
-        sendWriter = new PrintWriter( new BufferedOutputStream(socket.getOutputStream()), true, StandardCharsets.US_ASCII );
+        receiveReader = new BufferedReader( new InputStreamReader(socket.getInputStream(), StandardCharsets.UTF_8) );
+        sendWriter = new PrintWriter( new BufferedOutputStream(socket.getOutputStream()), true, StandardCharsets.UTF_8 );
+        SmtpResponse response = readResponse();
+        if (!response.code.startsWith("2")) {
+            throw new SmtpProtocolException("Server not ready");
+        }
     }
 
-    public boolean sendEmail(String sender, String[] receivers, String subject, String body) throws IOException, InterruptedException
+    public boolean sendEmail(String sender, String[] receivers, String subject, String body) throws IOException
     {
         // TODO Create required smtp.commands and add them to the array
-        SmtpCommand[] commands = new SmtpCommand[0];
+        ArrayList<SmtpCommand> commands = new ArrayList<>();
+        commands.add( new SmtpEhlo("42.com"));
+        commands.add( new SmtpMailFrom(sender) );
+
+        for (String receiver : receivers) {
+            commands.add( new SmtpRcptTo(receiver) );
+        }
+
+        commands.add( new SmtpData() );
+        commands.add( new SmtpDataContent(subject, body) );
 
         try
         {
             for (SmtpCommand command : commands)
             {
-                sendWriter.println( command.toString() );
+                sendWriter.println(command);
                 sendWriter.flush();
-
+                System.out.println(command);
                 SmtpResponse response = readResponse();
 
                 if ( ! command.isResponseCodeExpected( response.code ) )
@@ -49,10 +63,13 @@ public class SmtpClient
 
             return true;
         }
-
         catch (SmtpProtocolException ex)
         {
-            // TODO Send a RSET command
+            SmtpCommand command = new SmtpRset();
+            SmtpResponse response = sendCommand(command);
+            if (!command.isResponseCodeExpected(response.code)) {
+                quit();
+            }
 
             return false;
         }
@@ -60,9 +77,14 @@ public class SmtpClient
 
     public void quit() throws IOException
     {
-        // TODO Send QUIT command
-
+        sendCommand( new SmtpQuit() );
         socket.close();
+    }
+
+    private SmtpResponse sendCommand(SmtpCommand command) throws IOException {
+        sendWriter.println( command );
+        sendWriter.flush();
+        return readResponse();
     }
 
     private SmtpResponse readResponse() throws IOException
@@ -75,6 +97,7 @@ public class SmtpClient
         do
         {
             line = receiveReader.readLine();
+            System.out.println(line);
 
             if ( line == null || line.length() < 3)
                 throw new SmtpProtocolException( "Response line is too short (less than 3 characters)" );
@@ -109,7 +132,7 @@ public class SmtpClient
 
                 if (line.charAt(3) == '-')
                     responseText.append( '\n' );
-                else if (line.charAt(3) != ' ')
+                else if (line.charAt(3) == ' ')
                     responseEnd = true;
                 else
                     throw new SmtpProtocolException( "Unexpected char ('"+line.charAt(3) +"') after response code!" );

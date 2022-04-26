@@ -3,7 +3,7 @@
     "host": "localhost",
     "port": 25
   },
-  "nbPrankGroups": 5,
+  "nbPrankGroups": 2,
   "prankMails": [
     {
       "subject": "Normal mail",
