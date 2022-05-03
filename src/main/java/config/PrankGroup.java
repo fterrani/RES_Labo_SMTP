@@ -2,13 +2,14 @@ package config;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class PrankGroup {
     private String sender;
     private final List<String> victims;
     private final int size;
 
-    public PrankGroup(int groupSize) {
+    private PrankGroup(int groupSize) {
         victims = new ArrayList<>(groupSize - 1);
         size = groupSize;
     }
@@ -21,15 +22,54 @@ public class PrankGroup {
         return sender;
     }
 
-    public void addVictim(String victim) {
+    public static PrankGroup[] createPrankGroups(String[] victims, int nbGroups) {
+        int groupsSize = victims.length / nbGroups;
+        int remainder = victims.length % nbGroups;
+
+        PrankGroup[] groups = new PrankGroup[nbGroups];
+        for (int i = 0; i < nbGroups; ++i) {
+            if (i < remainder)
+                groups[i] = new PrankGroup(groupsSize + 1);
+            else
+                groups[i] = new PrankGroup(groupsSize);
+        }
+
+        Random rand = new Random();
+        int remainingMails = victims.length;
+        String selectedMail;
+        for (PrankGroup group : groups) {
+            selectedMail = selectRandomMail(victims, remainingMails, rand);
+            group.setSender(selectedMail);
+            --remainingMails;
+
+            while (!group.isFull()) {
+                selectedMail = selectRandomMail(victims, remainingMails, rand);
+                group.addVictim(selectedMail);
+                --remainingMails;
+            }
+        }
+        return groups;
+    }
+
+    private static String selectRandomMail(String[] list, int length, Random rand) {
+        int i  = rand.nextInt(length);
+
+        String tmp = list[i];
+        list[i] = list[length - 1];
+        list[length - 1] = tmp;
+
+        return tmp;
+    }
+
+    private void addVictim(String victim) {
         victims.add(victim);
     }
 
-    public void setSender(String sender) {
+    private void setSender(String sender) {
         this.sender = sender;
     }
 
-    public boolean isFull() {
+    private boolean isFull() {
         return size - 1 == victims.size();
     }
 }
