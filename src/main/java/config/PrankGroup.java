@@ -6,12 +6,10 @@ import java.util.List;
 public class PrankGroup {
     private String sender;
     private final List<String> victims;
-    private boolean hasSender;
     private final int size;
 
     public PrankGroup(int groupSize) {
         victims = new ArrayList<>(groupSize - 1);
-        hasSender = false;
         size = groupSize;
     }
 
@@ -29,11 +27,6 @@ public class PrankGroup {
 
     public void setSender(String sender) {
         this.sender = sender;
-        hasSender = true;
-    }
-
-    public boolean isHasSender() {
-        return hasSender;
     }
 
     public boolean isFull() {
