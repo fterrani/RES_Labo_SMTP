@@ -38,7 +38,7 @@ public class SmtpClient
         }
 
         commands.add( new SmtpData() );
-        commands.add( new SmtpDataContent(subject, body) );
+        commands.add( new SmtpDataContent(subject, body, sender, receivers) );
 
         try
         {
