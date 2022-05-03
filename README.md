@@ -4,13 +4,11 @@
 
 ## Project description
 
-TODO
+This project allows to send prank mails to a defined set of mail addresses. The prank mails and the mail addresses to use for the prank can be configured.
 
-TODO
+The victims will be divided in a configurable number of groups, each one containing at least 3 people. A sender will be randomly chosen in the group; all other people in the group will be the receivers.
 
-TODO
-
-TODO
+The e-mail will be sent such that receivers will think the e-mail comes from the sender. The e-mail's body and subject is randomly chosen in the list of configured prank mails.
 
 ## Test the project locally
 
@@ -36,7 +34,7 @@ This project uses a [bugfixed MockMock fork maintained by HEIG-VD](https://githu
 4. Once the image was built, run this command to start the container in a temporary container:
    `docker run -d --rm -p 25:25/tcp -p 8282:8282/tcp heig-mockmock`
 
-5. MockMock should now be running. To see the webinterface of MockMock, open a web browser and go to `http://localhost:8282`
+5. MockMock should now be running. You can send SMTP commands to `localhost` on port `25`. To see the webinterface of MockMock, open a web browser and go to `http://localhost:8282`.
 
 6. When you are done using MockMock, you can stop the container using the following command: `docker container stop <container-id>` where `<container-id>` is the name of the container you created earlier (use `docker ps` to see started container and their IDs)
 
@@ -44,56 +42,94 @@ This project uses a [bugfixed MockMock fork maintained by HEIG-VD](https://githu
 
 ### Configure a prank campaign
 
-TODO
+The prank campaign configuration is done via a JSON file named `prank-config.json`. The file follows the syntax shown below:
 
-TODO
+```json
+{
+  "smtpServer": {
+    "host": "smtp.example.org",
+    "port": 25
+  },
+  "nbPrankGroups": 2,
+  "prankMails": [
+    {
+      "subject": "My first prank mail",
+      "body": "The body of my first prank mail."
+    },
+    {
+      "subject": "My second prank mail with UTF-8 chars 章レム献属達ヤ注見とらっし",
+      "body": "The body can also contain UTF-8 chars極走見漢がぼあぱ。It can also \n contain \r\n new lines!"
+    }
+  ],
+  "victims": [
+    "a@example.org",
+    "b@example.org",
+    "c@example.org",
+    "d@example.org",
+    "e@example.org",
+    "f@example.org",
+    "g@example.org",
+    "h@example.org",
+    "i@example.org"
+  ]
+}
+```
 
-TODO
-
-TODO
+In this example, 2 groups were configured. This will lead to the creation of a 5-person group and a 4-person group. Configuring 1 or 3 groups would also be OK in this case. However, configuring 4 groups or more is impossible with the provided set of victims since a group must contain at least 3 people.
 
 ### Running a prank campaign
 
-TODO
+To run a prank campaign:
 
-TODO
-
-TODO
-
-TODO
+1. Download this GitHub repository's content
+2. Go in the folder that contains `pom.xml` and use [Maven](https://maven.apache.org/) commands to download the required dependencies and compile the program to a JAR.
+3. Create a `prank-config.json` file that follows the syntax described above
+4. Place `prank-config.json` at `./config-files/prank-config.json` relatively to the JAR's location.
+5. Run the JAR with `java -jar myfile.jar`. Doing this will send the prank e-mails.
 
 ## Implementation description
 
 ### Class diagram
 
-TODO
+TODO ECE
 
-TODO
+TODO ECE
 
-TODO
+TODO ECE
 
-TODO
+TODO ECE
 
-### Main classes' responsibilities
+#### Main classes' responsibilities
 
-TODO
-
-TODO
-
-**Clear and simple instructions for configuring your tool and running a prank campaign**. If you do a good job, an external user should be able to clone your  repo, edit a couple of files and send a batch of e-mails in less than 10 minutes.
-
-TODO
-
-TODO
+- `PrankConfigReader` is used to **parse** the JSON configuration file and **validate** the configuration.
+- `PrankGroup` is used to represent prank groups (group of e-mail addresses with one sender and several recipients). The class also defines a method that will take care of **generating prank groups**, given a list of victims and a number of groups to generate.
+- `SmtpClient` implements a basic SMTP client:
+  - it can **send an e-mail** using the following SMTP commands: `EHLO`, `MAIL FROM`, `RCPT TO`, `DATA`
+  - Each SMTP command has one or several expected response codes defined. If an **unexpected response code** is received from the server, a `RSET` command is used.
+  - When the client **has sent all prank e-mails**, a `QUIT` command is used.
+  - The client can read single or multiline SMTP responses
+- `SmtpCommand` and its subclasses represent SMTP commands used by `SmtpClient`.
+- `SmtpResponse` stores data of an SMTP response.
 
 ### Sequence diagram
 
-TODO
+TODO FTI
 
-TODO
+TODO FTI
 
-document the key aspects of your code. It is a good idea to start with a **class diagram**. Decide which classes you want to show (focus on the important ones) and describe their responsibilities in text. It is also certainly a good  idea to include examples of dialogues between your client and an SMTP  server (maybe you also want to include some screenshots here).
+document the key aspects of your code. It is a good idea to start with a **class diagram**. Decide which classes you want to show (focus on the important ones) and describe their responsibilities in text.
 
-TODO
 
-TODO
+
+It is also certainly a good  idea to include examples of dialogues between your client and an SMTP  server (maybe you also want to include some screenshots here).
+
+TODO FTI
+
+# TODO
+
+- finish class diagram
+- create sequence diagram
+- document main methods in the code
+- make sure no TODO is left in the code
+- read again the HEIG's repository instructions to make sure everything was done
+- re-read the report
