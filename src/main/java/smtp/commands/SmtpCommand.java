@@ -7,7 +7,7 @@ import java.util.regex.Pattern;
 // TODO Create subclasses for all smtp.commands
 public abstract class SmtpCommand
 {
-    private String expectedResponseRegex = null;
+    private String expectedResponseRegex;
 
     public SmtpCommand(SmtpResponseType expectedResponseType)
     {
@@ -29,10 +29,6 @@ public abstract class SmtpCommand
             throw new IllegalArgumentException();
 
         expectedResponseRegex = Pattern.quote( expectedResponseCode );
-    }
-
-    public SmtpCommand()
-    {
     }
 
     public boolean isResponseCodeExpected(String responseCode)

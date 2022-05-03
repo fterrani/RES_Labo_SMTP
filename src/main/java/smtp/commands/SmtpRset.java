@@ -1,7 +1,5 @@
 package smtp.commands;
 
-import smtp.SmtpResponseType;
-
 public class SmtpRset extends SmtpCommand {
 
     public SmtpRset() {
