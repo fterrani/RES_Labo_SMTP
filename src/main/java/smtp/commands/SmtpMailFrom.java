@@ -1,7 +1,5 @@
 package smtp.commands;
 
-import smtp.SmtpResponseType;
-
 public class SmtpMailFrom extends SmtpCommand
 {
     private final String sender;

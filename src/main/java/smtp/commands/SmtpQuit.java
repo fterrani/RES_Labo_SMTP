@@ -1,7 +1,5 @@
 package smtp.commands;
 
-import smtp.SmtpResponseType;
-
 public class SmtpQuit extends SmtpCommand {
 
     public SmtpQuit() {

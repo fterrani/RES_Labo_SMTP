@@ -21,7 +21,7 @@ public class SmtpClient
         receiveReader = new BufferedReader( new InputStreamReader(socket.getInputStream(), StandardCharsets.UTF_8) );
         sendWriter = new PrintWriter( new BufferedOutputStream(socket.getOutputStream()), true, StandardCharsets.UTF_8 );
         SmtpResponse response = readResponse();
-        if (!response.code.startsWith("2")) {
+        if (!response.getCode().startsWith("2")) {
             throw new SmtpProtocolException("Server not ready");
         }
     }
@@ -57,14 +57,15 @@ public class SmtpClient
                 sendWriter.flush();
                 System.out.println(command);
                 SmtpResponse response = readResponse();
+                System.out.println(response.getText());
 
-                if ( ! command.isResponseCodeExpected( response.code ) )
+                if ( ! command.isResponseCodeExpected( response.getCode() ) )
                 {
                     throw new SmtpProtocolException(
                         String.format(
                             "Unexpected response (expected something matching regex \"%s\", got \"%s\")",
                             command.getExpectedResponseRegex(),
-                            response.code
+                            response.getCode()
                         )
                    );
                 }
@@ -76,7 +77,7 @@ public class SmtpClient
         {
             SmtpCommand command = new SmtpRset();
             SmtpResponse response = sendCommand(command);
-            if (!command.isResponseCodeExpected(response.code)) {
+            if (!command.isResponseCodeExpected(response.getCode())) {
                 quit();
             }
 
@@ -111,7 +112,6 @@ public class SmtpClient
         do
         {
             line = receiveReader.readLine();
-            System.out.println(line);
 
             if ( line == null || line.length() < 3)
                 throw new SmtpProtocolException( "Response line is too short (less than 3 characters)" );
