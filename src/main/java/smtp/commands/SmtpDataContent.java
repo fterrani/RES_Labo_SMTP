@@ -1,7 +1,9 @@
 package smtp.commands;
 
 import smtp.SmtpClient;
-import smtp.SubjectHeaderRfc1342Encoder;
+
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 
 public class SmtpDataContent extends SmtpCommand {
     private final String subject;
@@ -27,12 +29,19 @@ public class SmtpDataContent extends SmtpCommand {
         for (int i = 1; i < receivers.length; ++i)
             s.append(", ").append(receivers[i]);
         s.append(SmtpClient.END_LINE);
-        s.append("Subject: ").append( SubjectHeaderRfc1342Encoder.encode(subject) );
+        s.append("Subject: ").append( base64Encode(subject) );
         s.append(SmtpClient.END_LINE);
         s.append("Content-Type: text/plain; charset=utf-8");
         s.append(SmtpClient.END_LINE).append(SmtpClient.END_LINE);
         s.append( body.replaceAll("\r\n\\.", "\r\n..") );
         s.append(SmtpClient.END_LINE).append(".");
         return s.toString();
+    }
+
+    private static String base64Encode(String text)
+    {
+        byte[] utf8Bytes = text.getBytes( StandardCharsets.UTF_8 );
+        String base64 = Base64.getEncoder().encodeToString( utf8Bytes );
+        return  "=?utf-8?B?" + base64 + "?=";
     }
 }
