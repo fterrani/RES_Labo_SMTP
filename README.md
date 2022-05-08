@@ -91,13 +91,7 @@ To run a prank campaign:
 
 ### Class diagram
 
-TODO ECE
-
-TODO ECE
-
-TODO ECE
-
-TODO ECE
+![](figures/class-diagram.png)
 
 #### Main classes' responsibilities
 
@@ -113,11 +107,9 @@ TODO ECE
 
 ### Sequence diagram
 
-TODO FTI
+![](figures/sequence-diagram.png)
 
-TODO FTI
-
-document the key aspects of your code. It is a good idea to start with a **class diagram**. Decide which classes you want to show (focus on the important ones) and describe their responsibilities in text.
+### Example of exchange between `SmtpClient` and MockMock
 
 ```
 EHLO 42.com
@@ -147,16 +139,3 @@ Best regards
 QUIT
 221 Bye
 ```
-
-It is also certainly a good  idea to include examples of dialogues between your client and an SMTP  server (maybe you also want to include some screenshots here).
-
-TODO FTI
-
-# TODO
-
-- finish class diagram
-- create sequence diagram
-- document main methods in the code
-- make sure no TODO is left in the code
-- read again the HEIG's repository instructions to make sure everything was done
-- re-read the report
