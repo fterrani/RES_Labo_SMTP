@@ -26,9 +26,18 @@ public class SmtpClient
         }
     }
 
+    /**
+     * Sends an e-mail to this instance's server using the SMTP protocol. All receivers will receive the e-mail directly
+     * (To header will be used, neither Cc nor Bcc).
+     * @param sender The sender's mail address
+     * @param receivers The receivers' mail addresses
+     * @param subject The mail's subject
+     * @param body The mail's body
+     * @return true if the e-mail was successfully sent, false if a problem occurred and the mail wasn't sent.
+     * @throws IOException
+     */
     public boolean sendEmail(String sender, String[] receivers, String subject, String body) throws IOException
     {
-        // TODO Create required smtp.commands and add them to the array
         ArrayList<SmtpCommand> commands = new ArrayList<>();
         commands.add( new SmtpEhlo("42.com"));
         commands.add( new SmtpMailFrom(sender) );
@@ -76,6 +85,10 @@ public class SmtpClient
         }
     }
 
+    /**
+     * Ends the SMTP communication and closes the socket.
+     * @throws IOException
+     */
     public void quit() throws IOException
     {
         sendCommand( new SmtpQuit() );
@@ -88,6 +101,7 @@ public class SmtpClient
         return readResponse();
     }
 
+    // TODO TO DOCUMENT !!
     private SmtpResponse readResponse() throws IOException
     {
         StringBuilder responseText = new StringBuilder();
