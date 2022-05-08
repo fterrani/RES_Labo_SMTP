@@ -22,10 +22,22 @@ public class Program
 
         // For each group, randomly selects a mail and send it.
         Random rand = new Random();
+        int mailNumber = 1;
         for (PrankGroup group : groups) {
             int mailsIndex = rand.nextInt(config.getPrankMails().length);
-            client.sendEmail(group.getSender(), group.getVictims(),
-                             config.getPrankMails()[mailsIndex].getSubject(), config.getPrankMails()[mailsIndex].getBody());
+
+            System.out.println("####################### Sending mail " + mailNumber + "...");
+            boolean mailSent = client.sendEmail(group.getSender(), group.getVictims(),
+                                                config.getPrankMails()[mailsIndex].getSubject(),
+                                                config.getPrankMails()[mailsIndex].getBody());
+
+            if (mailSent) {
+                System.out.println("####################### Mail " + mailNumber + ": success \uD83D\uDE0A");
+            } else {
+                System.out.println("####################### Mail " + mailNumber + ": fail \uD83D\uDE22");
+            }
+            ++mailNumber;
+            System.out.println();
         }
 
         // Closes the client cleanly

@@ -24,6 +24,11 @@ public class SmtpClient
         if (!response.getCode().startsWith("2")) {
             throw new SmtpProtocolException("Server not ready");
         }
+        SmtpCommand command = new SmtpEhlo("42.com");
+        response = sendCommand(command);
+        if (! command.isResponseCodeExpected( response.getCode() )) {
+            throw new SmtpProtocolException("Unexpected response code to EHLO command");
+        }
     }
 
     /**
@@ -39,7 +44,6 @@ public class SmtpClient
     public boolean sendEmail(String sender, String[] receivers, String subject, String body) throws IOException
     {
         ArrayList<SmtpCommand> commands = new ArrayList<>();
-        commands.add( new SmtpEhlo("42.com"));
         commands.add( new SmtpMailFrom(sender) );
 
         for (String receiver : receivers) {
@@ -53,11 +57,7 @@ public class SmtpClient
         {
             for (SmtpCommand command : commands)
             {
-                sendWriter.println(command);
-                sendWriter.flush();
-                System.out.println(command);
-                SmtpResponse response = readResponse();
-                System.out.println(response.getText());
+                SmtpResponse response = sendCommand(command);
 
                 if ( ! command.isResponseCodeExpected( response.getCode() ) )
                 {
@@ -102,9 +102,16 @@ public class SmtpClient
      * @throws IOException If a network error occurs.
      */
     private SmtpResponse sendCommand(SmtpCommand command) throws IOException {
+        System.out.println(command);
+
         sendWriter.println( command );
         sendWriter.flush();
-        return readResponse();
+
+        SmtpResponse response = readResponse();
+
+        System.out.println(response.getText());
+
+        return response;
     }
 
     /**
