@@ -11,8 +11,6 @@ public class SmtpDataContent extends SmtpCommand {
     private final String sender;
     private final String[] receivers;
 
-
-
     public SmtpDataContent(String subject, String body, String sender, String[] receivers) {
         super("250");
         this.subject = subject;
@@ -35,6 +33,7 @@ public class SmtpDataContent extends SmtpCommand {
         s.append(SmtpClient.END_LINE).append(SmtpClient.END_LINE);
         s.append( body.replaceAll("\r\n\\.", "\r\n..") );
         s.append(SmtpClient.END_LINE).append(".");
+        // The final end line will be inserted by the object in charge of sending the command
         return s.toString();
     }
 

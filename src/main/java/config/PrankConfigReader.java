@@ -10,6 +10,12 @@ import java.nio.file.Path;
 
 public class PrankConfigReader
 {
+    /**
+     * Reads the JSON configuration found at configPath and creates a PrankConfig instance
+     * @param configPath Path to configuration file
+     * @return The configuration file represented by a PrankConfig instance
+     * @throws IOException If an error occurs when reading the file
+     */
     public static PrankConfig readPrankConfig( Path configPath ) throws IOException
     {
         String json = Files.readString(configPath, StandardCharsets.UTF_8);

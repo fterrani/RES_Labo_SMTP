@@ -119,7 +119,34 @@ TODO FTI
 
 document the key aspects of your code. It is a good idea to start with a **class diagram**. Decide which classes you want to show (focus on the important ones) and describe their responsibilities in text.
 
+```
+EHLO 42.com
+250-bd8d8ddc5803
+250-8BITMIME
+250 Ok
+MAIL FROM:<c@example.org>
+250 Ok
+RCPT TO:<f@example.org>
+250 Ok
+RCPT TO:<b@example.org>
+250 Ok
+RCPT TO:<e@example.org>
+250 Ok
+DATA
+354 End data with <CR><LF>.<CR><LF>
+From: c@example.org
+To: f@example.org, b@example.org, e@example.org
+Subject: =?utf-8?B?Tm9ybWFsIG1haWw=?=
+Content-Type: text/plain; charset=utf-8
 
+This is a normal mail.
+
+Best regards
+.
+250 Ok
+QUIT
+221 Bye
+```
 
 It is also certainly a good  idea to include examples of dialogues between your client and an SMTP  server (maybe you also want to include some screenshots here).
 

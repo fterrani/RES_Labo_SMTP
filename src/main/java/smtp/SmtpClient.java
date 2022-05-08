@@ -24,6 +24,11 @@ public class SmtpClient
         if (!response.getCode().startsWith("2")) {
             throw new SmtpProtocolException("Server not ready");
         }
+        SmtpCommand command = new SmtpEhlo("42.com");
+        response = sendCommand(command);
+        if (! command.isResponseCodeExpected( response.getCode() )) {
+            throw new SmtpProtocolException("Unexpected response code to EHLO command");
+        }
     }
 
     /**
@@ -34,12 +39,11 @@ public class SmtpClient
      * @param subject The mail's subject
      * @param body The mail's body
      * @return true if the e-mail was successfully sent, false if a problem occurred and the mail wasn't sent.
-     * @throws IOException
+     * @throws IOException If a network error occurs.
      */
     public boolean sendEmail(String sender, String[] receivers, String subject, String body) throws IOException
     {
         ArrayList<SmtpCommand> commands = new ArrayList<>();
-        commands.add( new SmtpEhlo("42.com"));
         commands.add( new SmtpMailFrom(sender) );
 
         for (String receiver : receivers) {
@@ -53,11 +57,7 @@ public class SmtpClient
         {
             for (SmtpCommand command : commands)
             {
-                sendWriter.println(command);
-                sendWriter.flush();
-                System.out.println(command);
-                SmtpResponse response = readResponse();
-                System.out.println(response.getText());
+                SmtpResponse response = sendCommand(command);
 
                 if ( ! command.isResponseCodeExpected( response.getCode() ) )
                 {
@@ -86,8 +86,8 @@ public class SmtpClient
     }
 
     /**
-     * Ends the SMTP communication and closes the socket.
-     * @throws IOException
+     * Ends the SMTP communication by sending a QUIT command and closing the socket.
+     * @throws IOException If a network error occurs.
      */
     public void quit() throws IOException
     {
@@ -95,13 +95,32 @@ public class SmtpClient
         socket.close();
     }
 
+    /**
+     * Sends the command SmtpCommand and reads the response.
+     * @param command The command to send
+     * @return The server response
+     * @throws IOException If a network error occurs.
+     */
     private SmtpResponse sendCommand(SmtpCommand command) throws IOException {
+        System.out.println(command);
+
         sendWriter.println( command );
         sendWriter.flush();
-        return readResponse();
+
+        SmtpResponse response = readResponse();
+
+        System.out.println(response.getText());
+
+        return response;
     }
 
-    // TODO TO DOCUMENT !!
+    /**
+     * Reads a SMTP response from the socket. This method can read single- and multi-line responses.
+     * It also parses the SMTP response code.
+     * @return A SmtpResponse instance containing the SMTP response code and all rows returned by the server
+     * @throws IOException If a network error occurs when reading the response
+     * @throws SmtpProtocolException If an unexpected SMTP response is received from the server
+     */
     private SmtpResponse readResponse() throws IOException
     {
         StringBuilder responseText = new StringBuilder();
