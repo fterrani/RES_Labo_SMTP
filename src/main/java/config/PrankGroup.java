@@ -22,6 +22,12 @@ public class PrankGroup {
         return sender;
     }
 
+    /**
+     * Creates nbGroups containing 1 sender and at least 2 receivers randomly chosen in the list of victims.
+     * @param victims  List of victims
+     * @param nbGroups Number of groups to create
+     * @return An array of PrankGroup
+     */
     public static PrankGroup[] createPrankGroups(String[] victims, int nbGroups) {
         int groupsSize = victims.length / nbGroups;
         int remainder = victims.length % nbGroups;

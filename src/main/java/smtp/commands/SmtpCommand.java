@@ -4,10 +4,9 @@ import smtp.SmtpResponseType;
 
 import java.util.regex.Pattern;
 
-// TODO Create subclasses for all smtp.commands
 public abstract class SmtpCommand
 {
-    private String expectedResponseRegex;
+    private final String expectedResponseRegex;
 
     public SmtpCommand(SmtpResponseType expectedResponseType)
     {
@@ -31,6 +30,11 @@ public abstract class SmtpCommand
         expectedResponseRegex = Pattern.quote( expectedResponseCode );
     }
 
+    /**
+     * Checks if the provided response code is positive for the SmtpCommand instance
+     * @param responseCode the response code to check
+     * @return True if the the server response code is positive for the SmtpCommand instance, false otherwise
+     */
     public boolean isResponseCodeExpected(String responseCode)
     {
         if ( expectedResponseRegex != null)
