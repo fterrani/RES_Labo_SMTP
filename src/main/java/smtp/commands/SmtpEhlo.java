@@ -1,14 +1,12 @@
 package smtp.commands;
 
-import smtp.SmtpResponseType;
-
 public class SmtpEhlo extends SmtpCommand
 {
     private final String domain;
 
     public SmtpEhlo( String domain )
     {
-        super(SmtpResponseType.POSITIVE_COMPLETION);
+        super("250");
         this.domain = domain;
     }
 

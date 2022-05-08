@@ -1,13 +1,11 @@
 package smtp.commands;
 
-import smtp.SmtpResponseType;
-
 public class SmtpRcptTo extends SmtpCommand {
     private final String mail;
 
 
     public SmtpRcptTo(String mail) {
-        super(SmtpResponseType.POSITIVE_COMPLETION);
+        super("25[01]");
         this.mail = mail;
     }
 
